@@ -56,12 +56,12 @@ Faster R-CNN의 전체 구조를 처음부터 구현하는 대신, 객체 탐지
 
 ### Test Scripts
 
-| File | Description |
-|---|---|
-| `01_test_anchor.py` | Anchor 생성 및 Valid Anchor 검증 |
-| `02_test_matcher.py` | Anchor Matching 결과 및 IoU 검증 |
-| `03_test_dataloader.py` | DataLoader의 Batch 구성 및 Tensor Shape 확인 |
-| `04_visualize_gt.py` | 이미지에 GT Bounding Box를 그려 시각화 |
+| File                      | Description |
+|---------------------------|---|
+| `01_test_anchor.py`       | Anchor 생성 및 Valid Anchor 검증 |
+| `02_test_matcher.py`      | Anchor Matching 결과 및 IoU 검증 |
+| `03_test_dataloader.py`   | DataLoader의 Batch 구성 및 Tensor Shape 확인 |
+| `04_test_visualize_gt.py` | 이미지에 GT Bounding Box를 그려 시각화 |
 
 ### Dataset Directory
 
