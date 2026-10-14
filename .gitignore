@@ -1,0 +1,21 @@
+# Dataset
+Data/
+
+# Model checkpoints
+checkpoints/
+*.pth
+*.pt
+
+# Experiment outputs
+outputs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE settings
+.idea/
+
+# Virtual environments
+.venv/
+venv/
