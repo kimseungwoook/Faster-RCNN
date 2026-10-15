@@ -93,7 +93,7 @@ class VOCDataset(Dataset):
             labels.append(self.class_to_idx[cls_name])
 
 
-        boxes_tensor = torch.tensor(boxes, dtype=torch.float32)
+        boxes_tensor = torch.tensor(boxes, dtype=torch.float32).reshape(-1, 4)
         labels_tensor = torch.tensor(labels, dtype=torch.int64)
 
         target = {
@@ -109,7 +109,6 @@ if __name__ == "__main__":
 
     train_dataset = VOCDataset(root_dir, split="train")
     val_dataset = VOCDataset(root_dir, split="val")
-    test_dataset = VOCDataset(root_dir, split="test")
-
+    image_tensor, target = train_dataset[3]
     print(f"Train 이미지 개수 : {len(train_dataset)}")
     print((f"Val 이미지 개수 : {len(val_dataset)}"))
