@@ -23,6 +23,11 @@ class AnchorMatcher:
         max_IoUs = []
         matched_gt_indices = []
 
+        if len(anchors) != len(valid_flags):
+            raise ValueError(
+                "anchors와 valid_flags의 길이가 일치하지 않습니다."
+            )
+
         for anchor_idx, (valid, anchor_box) in enumerate(zip(valid_flags, anchors)):
             # 각 Anchor box의 최대 IoU 계산 -> max_IoU의 값에 따라 positive, negative, Ignore 배정
             max_iou = 0
