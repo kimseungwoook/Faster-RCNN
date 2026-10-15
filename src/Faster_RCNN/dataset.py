@@ -12,7 +12,7 @@ VOC_CLASSES = [
 ]
 
 class VOCDataset(Dataset):
-    def __init__(self, root_dir):
+    def __init__(self, root_dir, split="train"):
         """
             PASCAL VOC 데이터셋의 경로와 이미지 ID를 초기화
 
@@ -36,7 +36,12 @@ class VOCDataset(Dataset):
         if not self.imageSets_main.is_dir():
             raise FileNotFoundError(f"ImageSets not found in {self.imageSets_main}")
 
-        train_path = self.imageSets_main / "train.txt"
+        if split not in ("train", "val"):
+            raise ValueError(
+                f"지원하지 않는 split 입니다. : {split}"
+            )
+
+        train_path = self.imageSets_main / f"{split}.txt"
         with open(train_path, "r") as f:
             for line in f:
                 self.image_ids.append(line.strip())
@@ -97,3 +102,14 @@ class VOCDataset(Dataset):
         }
 
         return image_tensor, target
+
+
+if __name__ == "__main__":
+    root_dir = r"C:\Users\admin\source\Faster R-CNN\Data\VOCdevkit\VOC2007"
+
+    train_dataset = VOCDataset(root_dir, split="train")
+    val_dataset = VOCDataset(root_dir, split="val")
+    test_dataset = VOCDataset(root_dir, split="test")
+
+    print(f"Train 이미지 개수 : {len(train_dataset)}")
+    print((f"Val 이미지 개수 : {len(val_dataset)}"))
