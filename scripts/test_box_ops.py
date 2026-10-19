@@ -1,4 +1,4 @@
-from src.Faster_RCNN.box_ops import box_iou, encode_boxes
+from src.Faster_RCNN.box_ops import box_iou, encode_boxes, decode_boxes
 import torch
 import math
 
@@ -83,3 +83,18 @@ if __name__ == "__main__":
     assert encoded.shape == (1, 4)
     assert torch.allclose(encoded, expected_tensor)
     print("Encoding Test 통과")
+
+    # ===== Decoding Test =====
+    anchors = torch.tensor([
+        [0., 0., 100., 100.]
+    ])
+    gt_boxes = torch.tensor([
+        [10., 20., 130., 120.]
+    ])
+
+    encoded = encode_boxes(anchors, gt_boxes)
+    decoded = decode_boxes(anchors, encoded)
+    print(f"Decode Boxes : {decoded}")
+    print(f"Decode Boxes.shape {decoded.shape}")
+    assert torch.allclose(decoded, gt_boxes)
+    print("Decoding Test 통과")

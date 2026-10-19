@@ -69,5 +69,28 @@ def encode_boxes(anchors, gt_boxes):
 
     return stack
 
-def decode_boxes():
-    pass
+def decode_boxes(anchors, delta):
+    """
+        param anchors : Anchor box 좌표
+        param delta : 예측한 [tx, ty, tw, th]
+    :return: 실제 bounding box 좌표
+        regression_targets : [N, 4]
+    """
+    anchors_center_x = (anchors[:, 0] + anchors[:, 2]) / 2
+    anchors_center_y = (anchors[:, 1] + anchors[:, 3]) / 2
+    anchors_w = anchors[:, 2] - anchors[:, 0]
+    anchors_h = anchors[:, 3] - anchors[:, 1]
+
+    reg_x = anchors_center_x + (anchors_w * delta[:, 0])
+    reg_y = anchors_center_y + (anchors_h * delta[:, 1])
+    reg_w = anchors_w * torch.exp(delta[:, 2])
+    reg_h = anchors_h * torch.exp(delta[:, 3])
+
+    xmin = reg_x - reg_w * 0.5
+    ymin = reg_y - reg_h * 0.5
+    xmax = reg_x + reg_w * 0.5
+    ymax = reg_y + reg_h * 0.5
+
+    decoded_boxes = torch.stack([xmin, ymin, xmax, ymax], dim=1)
+
+    return decoded_boxes
