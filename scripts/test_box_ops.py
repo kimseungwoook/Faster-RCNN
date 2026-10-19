@@ -1,5 +1,6 @@
-from src.Faster_RCNN.box_ops import box_iou
+from src.Faster_RCNN.box_ops import box_iou, encode_boxes
 import torch
+import math
 
 if __name__ == "__main__":
     # ===== 두 box가 일부 겹치는 경우 =====
@@ -62,3 +63,23 @@ if __name__ == "__main__":
     assert iou.shape == (2, 2)
     assert torch.allclose(iou, expected_iou)
     print("Test4 통과")
+
+
+    # ===== Encoding Test =====
+    anchors = torch.tensor([
+        [0., 0., 100., 100.]
+    ])
+    gt_boxes = torch.tensor([
+        [10., 20., 130., 120.]
+    ])
+
+    # 반환 값 = [N, 4]
+    encoded = encode_boxes(anchors, gt_boxes)
+    expected_tensor = torch.tensor([
+        [0.2000, 0.2000, math.log(1.2), 0.0000]
+    ])
+    print(f"Encode Boxes : {encoded}")
+    print(f"Encode Shape : {encoded.shape}")
+    assert encoded.shape == (1, 4)
+    assert torch.allclose(encoded, expected_tensor)
+    print("Encoding Test 통과")

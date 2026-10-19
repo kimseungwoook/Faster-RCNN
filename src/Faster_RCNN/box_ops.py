@@ -42,3 +42,32 @@ def box_iou(boxes1, boxes2):
     IoU = inter_area / union_area.clamp(min=1e-6)
 
     return IoU
+
+def encode_boxes(anchors, gt_boxes):
+    """
+    anchor box를 GT_box와의 좌표를 통해 좌표를 예측
+    GT box는 anchor_box와 매칭된 gt_box를 주기 떄문에 [N, 4] 형태이다.
+        param anchors: [N, 4]
+        param gt_boxes: [N, 4]
+
+    return:
+        regression_targets : [N, 4]
+    """
+    # anchor = [N, 4]
+    anchor_center_x = (anchors[:, 2] + anchors[:, 0]) / 2
+    anchor_center_y = (anchors[:, 3] + anchors[:, 1]) / 2
+    # GT = [M, 4]
+    gt_center_x = (gt_boxes[:, 2] + gt_boxes[:, 0]) / 2
+    gt_center_y = (gt_boxes[:, 3] + gt_boxes[:, 1]) / 2
+
+    tx = (gt_center_x - anchor_center_x) / (anchors[:, 2] - anchors[:, 0])
+    ty = (gt_center_y - anchor_center_y) / (anchors[:, 3] - anchors[:, 1])
+    tw = torch.log((gt_boxes[:, 2] - gt_boxes[:, 0]) / (anchors[:, 2] - anchors[:, 0]))
+    th = torch.log((gt_boxes[:, 3] - gt_boxes[:, 1]) / (anchors[:, 3] - anchors[:, 1]))
+
+    stack = torch.stack([tx, ty, tw, th], dim=1)
+
+    return stack
+
+def decode_boxes():
+    pass
